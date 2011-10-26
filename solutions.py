@@ -32,14 +32,14 @@ def p4():
     return big_pal
 
 if __name__ == '__main__':
-    print "Enter a function or type 'quit' to stop."
+    print "Enter a function (like 'p1()') or type 'quit' to stop."
     while True:
         try:
             fxn = raw_input("Enter a function to run: ")
             if fxn == "quit":
                 print "Goodbye."
                 sys.exit()
-            print eval('%s()' % fxn)
+            print eval(fxn)
         except (EOFError, KeyboardInterrupt):
             print
             sys.exit()
