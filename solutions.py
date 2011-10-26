@@ -61,8 +61,7 @@ def p7():
     return pval
 
 def p8():
-    prod = 0
-    fdex, tdex = 0, 5
+    prod, dex = 0, 5
     digits = """73167176531330624919225119674426574742355349194934
                 96983520312774506326239578318016984801869478851843
                 85861560789112949495459501737958331952853208805511
@@ -84,17 +83,11 @@ def p8():
                 05886116467109405077541002256983155200055935729725
                 71636269561882670428252483600823257530420752963450"""
     digits = re.sub('\s+', '', digits)
-    while True:
-        dints = [int(d) for d in digits[fdex:tdex]]
-        if len(dints) < 5:
-            break
-
-        new_prod = reduce(operator.mul, dints)
+    while dex < len(digits):
+        new_prod = reduce(operator.mul, [int(d) for d in digits[dex - 5:dex]])
         if new_prod > prod:
             prod = new_prod
-
-        fdex += 1
-        tdex += 1
+        dex += 1
 
     return prod
 
