@@ -21,6 +21,16 @@ def p2(n=4000000):
         i += 1
     return total
 
+def p4():
+    big_pal = 0
+    for m1 in xrange(100, 999):
+        for m2 in xrange(100, 999):
+            val = m1 * m2
+            if val == int((str(val)[::-1])):
+                if val > big_pal:
+                    big_pal = val
+    return big_pal
+
 if __name__ == '__main__':
     print "Enter a function or type 'quit' to stop."
     while True:
