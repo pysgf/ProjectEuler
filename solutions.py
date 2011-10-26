@@ -39,14 +39,15 @@ def p4():
 def p5(n=20):
     return reduce(lcm, xrange(1, 20))
 
+
 def p7():
     n = 1
     pcount = 0
     pval = 0
     while True:
-        n+=1
+        n += 1
         isprime = True
-        for j in range(2, int(math.sqrt(n))+1):
+        for j in range(2, int(math.sqrt(n)) + 1):
             if not n % j:
                 isprime = False
                 break
@@ -55,7 +56,8 @@ def p7():
             pval = n
         if pcount == 10001:
             break
-    return str(pval)
+    return pval
+
 
 if __name__ == '__main__':
     print "Enter a function (like 'p1()') or type 'quit' to stop."
