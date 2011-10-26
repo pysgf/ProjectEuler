@@ -31,6 +31,9 @@ def p4():
                     big_pal = val
     return big_pal
 
+def p5(n=20):
+    return reduce(lcm, xrange(1, 20))
+
 if __name__ == '__main__':
     print "Enter a function (like 'p1()') or type 'quit' to stop."
     while True:
