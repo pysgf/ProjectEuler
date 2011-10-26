@@ -4,11 +4,14 @@ A collection of Project Euler solutions.
 
 http://projecteuler.net/
 """
+import math
 import sys
 from functions import *
 
+
 def p1(n=1000):
     return sum([d for d in xrange(n) if not (d % 3 and d % 5)])
+
 
 def p2(n=4000000):
     i, total = 1, 0
@@ -21,6 +24,7 @@ def p2(n=4000000):
         i += 1
     return total
 
+
 def p4():
     big_pal = 0
     for m1 in xrange(100, 999):
@@ -31,8 +35,27 @@ def p4():
                     big_pal = val
     return big_pal
 
+
 def p5(n=20):
     return reduce(lcm, xrange(1, 20))
+
+def p7():
+    n = 1
+    pcount = 0
+    pval = 0
+    while True:
+        n+=1
+        isprime = True
+        for j in range(2, int(math.sqrt(n))+1):
+            if not n % j:
+                isprime = False
+                break
+        if isprime:
+            pcount += 1
+            pval = n
+        if pcount == 10001:
+            break
+    return str(pval)
 
 if __name__ == '__main__':
     print "Enter a function (like 'p1()') or type 'quit' to stop."
