@@ -4,7 +4,6 @@ A collection of Project Euler solutions.
 
 http://projecteuler.net/
 """
-import math
 import operator
 import re
 import sys
@@ -43,22 +42,14 @@ def p5(n=20):
 
 
 def p7():
-    n = 1
-    pcount = 0
-    pval = 0
+    n, prime_count = 2, 1
     while True:
+        if is_prime(n):
+            if prime_count == 10001:
+                return n
+            else:
+                prime_count += 1
         n += 1
-        isprime = True
-        for j in range(2, int(math.sqrt(n)) + 1):
-            if not n % j:
-                isprime = False
-                break
-        if isprime:
-            pcount += 1
-            pval = n
-        if pcount == 10001:
-            break
-    return pval
 
 
 def p8():

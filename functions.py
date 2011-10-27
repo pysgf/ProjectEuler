@@ -3,6 +3,7 @@
 Collection of helper functions for Project Euler solutions.
 
 """
+import math
 
 
 def fib(n):
@@ -21,6 +22,13 @@ def gcd(a, b):
         return a
     else:
         return gcd(b, a % b)
+
+
+def is_prime(n):
+    for j in xrange(2, int(math.sqrt(n)) + 1):
+        if not n % j:
+            return False
+    return True
 
 
 def lcm(a, b):
