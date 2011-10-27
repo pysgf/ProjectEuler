@@ -26,6 +26,10 @@ def p2(n=4000000):
     return total
 
 
+def p3(n=600851475143):
+    return max([f for f in factors(n) if is_prime(f)])
+
+
 def p4():
     big_pal = 0
     for m1 in xrange(100, 999):
