@@ -5,6 +5,7 @@ Collection of helper functions for Project Euler solutions.
 """
 import math
 
+
 def factors(n):
     xs = []
     for j in xrange(2, int(math.sqrt(n)) + 1):
@@ -12,6 +13,7 @@ def factors(n):
             xs.extend([n, j])
             n /= j
     return xs
+
 
 def fib(n):
     memo_dict = {0: 1, 1: 1}

@@ -11,7 +11,7 @@ from functions import *
 
 
 def p1(n=1000):
-    return sum([d for d in xrange(n) if not (d % 3 and d % 5)])
+    return sum(d for d in xrange(n) if not (d % 3 and d % 5))
 
 
 def p2(n=4000000):
@@ -43,6 +43,11 @@ def p4():
 
 def p5(n=20):
     return reduce(lcm, xrange(1, 20))
+
+
+def p6():
+    return (sum(i for i in xrange(1, 101)) ** 2
+            - sum(i ** 2 for i in xrange(1, 101)))
 
 
 def p7():
