@@ -42,14 +42,14 @@ def p5(n=20):
 
 
 def p7():
-    n, prime_count = 2, 1
+    n, prime_count = 3, 2
     while True:
         if is_prime(n):
             if prime_count == 10001:
                 return n
             else:
                 prime_count += 1
-        n += 1
+        n += 2
 
 
 def p8():
