@@ -7,6 +7,9 @@ http://projecteuler.net/
 import operator
 import re
 import sys
+import time
+import urllib
+from contextlib import closing
 from functions import *
 
 
@@ -32,8 +35,8 @@ def p3(n=600851475143):
 
 def p4():
     big_pal = 0
-    for m1 in xrange(100,999):
-        for m2 in xrange(100, 999):
+    for m1 in xrange(100,1000):
+        for m2 in xrange(m1, 1000):
             val = m1 * m2
             if val == int((str(val)[::-1])):
                 if val > big_pal:
@@ -93,16 +96,143 @@ def p8():
 
     return prod
 
+def p32():
+    """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
+    The product 7254 is unusual, as the identity, 39 x 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
+    Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
+    HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum. 
+    """
+    pan_found = set([0])
+    digits_avail_1 = set(['1','2','3','4','5','6','7','8','9'])  
+    for d1 in digits_avail_1:
+        digits_avail_2 = digits_avail_1 - set([d1])
+        for d2 in digits_avail_2:
+            digits_avail_3 = digits_avail_2 - set([d2])               
+            for d3 in digits_avail_3:
+                digits_avail_4 = digits_avail_3 - set([d3])               
+                for d4 in digits_avail_4:
+                    digits_avail_5 = digits_avail_4 - set([d4])                   
+                    for d5 in digits_avail_5:
+                        digits_avail_6 = digits_avail_5 - set([d5])
+                        #Pandigital only possible there are 5 total digits
+                        #   in the multiplicands.
+                        #Only check for 1 digit X 4 digit and 2 digit * 3 digit
+                        #   since commutative property makes others redundant.
+                        m1, m2 = int(d1),int(d2+d3+d4+d5)
+                        product = m1 * m2
+                        if product < 10000 and set(str(product)) == digits_avail_6:
+                            pan_found = pan_found.union(set([product]))
+                        m1, m2 = int(d1+d2) , int(d3+d4+d5)
+                        product = m1 * m2
+                        if product < 10000 and set(str(product)) == digits_avail_6:
+                            pan_found = pan_found.union(set([product]))
+    return sum(pan_found)
+                                        
+
+def GetAnswerAndTime(pnum):
+    solved = True
+    start_time = time.time()
+    try:
+        ans =eval('p%i()' % pnum)
+    except:
+        solved = False
+        ans = 0
+        ctime = 0.0
+    ctime = time.time() - start_time
+    return solved, ans, ctime
+
+def IsProjectEulerProblemPresent(pnum):
+    problem_present = True
+    with closing(urllib.urlopen('http://projecteuler.net/problem={0}'.format(pnum))) as page: 
+        try:
+            for lines in page.readlines():
+                # If a problem is not present project euler reverts to problems page
+                # which contains text 'Go to Problem'
+                if re.search('go to problem', lines, re.IGNORECASE):
+                    problem_present = False
+                    break
+                else:
+                    #problem pages have the text confirmation code
+                    if re.search('confirmation_code:', lines, re.IGNORECASE):
+                        break;
+        except:
+            problem_present = False
+    return problem_present
+ 
+def GetNumberOfProjectEulerProblems():
+    guess_pnum = 2**14
+    guess_inc = 2**13
+    present_pnum = 0
+    #Do simple binary search for problems
+    while guess_inc >= 1:
+        if IsProjectEulerProblemPresent(guess_pnum):
+            present_pnum = guess_pnum
+            guess_pnum += guess_inc
+        else:
+            guess_pnum -= guess_inc
+        guess_inc /= 2
+    if IsProjectEulerProblemPresent(guess_pnum):
+        present_pnum = guess_pnum
+    return present_pnum
+
+def pall(determine_problem_count=False):
+    """Calculates solutions to all problems and prints stataistics.
+    """
+    print '-----------------------------------------------------------------\n' \
+        'Calculation of the pySGF solutions to the Project Euler problems:\n'
+    if determine_problem_count:
+        #This should take around 20 seconds or less on a broadband connection.
+        print '\n    Determining problem count...'
+        start_time = time.time()
+        num_problems = GetNumberOfProjectEulerProblems()
+        print '    ...determination took {0:.2f} seconds.\n'.format(time.time() - start_time)
+    else:
+        num_problems = 356
+        
+    solved_problems = 0
+    total_calc_time = 0.0
+    max_calc_time = 0.0
+    max_calc_problem = 0
+    lowest_unsolved_problem = 0
+    in_unsolved_block = False
+    for pnum in xrange(1,num_problems + 1):
+        solved, ans, ctime = GetAnswerAndTime(pnum)
+        if solved:
+            solved_problems += 1
+            total_calc_time += ctime
+            if ctime > max_calc_time:
+                max_calc_time = ctime
+                max_calc_problem = pnum
+            if in_unsolved_block:
+                 print '*** unsolved problem(s) ****'
+            in_unsolved_block = False
+            print 'Problem {0:>4g}  Answer: {1:>20}        (calc time: {2:>7.5f} sec)'.format(pnum, str(ans), ctime)
+        else:
+            in_unsolved_block = True
+            if lowest_unsolved_problem == 0:
+                lowest_unsolved_problem = pnum
+    print '\nTotal calculation time: {0:>.5f} sec (average: {1:>.5f} sec).'.format(total_calc_time, total_calc_time/solved_problems)
+    print 'It turns out that problem {0} took the longest time to calculate ({1:>.5f} sec).'.format(max_calc_problem, max_calc_time)
+    if lowest_unsolved_problem > 0:
+        print 'The lowest numbered unsolved problem is problem {0}.'.format(lowest_unsolved_problem)
+    print '\nHappily, {0} of {1} problems have been solved ({2:>.3} %). {3} problems remain unsolved.'.format(solved_problems, num_problems, 100*float(solved_problems)/num_problems, num_problems-solved_problems)
+    print '\n-----------------------------------------------------------------'
+    return ''
+
+def pallc(): return pall(True)
 
 if __name__ == '__main__':
-    print  "Enter a function (like 'p1()') or type 'quit' to stop."
-    while True:
-        try:
-            fxn = raw_input("Enter a function to run: ")
-            if fxn == "quit":
-                print "Goodbye."
-                sys.exit()
-            print eval(fxn)
-        except (EOFError, KeyboardInterrupt):
-            print
-            sys.exit()
+    if len(sys.argv) > 1:
+        print eval('p{0}()'.format(sys.argv[1]))
+    else:
+       print "Enter a function (like 'p1()') or type 'quit' to stop."
+       while True:
+           try:
+               fxn = raw_input("Enter a function to run: ")
+               if fxn == "quit":
+                   print "Goodbye."
+                   sys.exit()
+               print eval(fxn)
+           except (EOFError, KeyboardInterrupt):
+               print
+               sys.exit()
