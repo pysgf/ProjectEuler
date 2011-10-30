@@ -32,7 +32,7 @@ def p3(n=600851475143):
 
 def p4():
     big_pal = 0
-    for m1 in xrange(100, 999):
+    for m1 in xrange(100,999):
         for m2 in xrange(100, 999):
             val = m1 * m2
             if val == int((str(val)[::-1])):
