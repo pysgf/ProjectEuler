@@ -95,7 +95,7 @@ def p8():
 
 
 if __name__ == '__main__':
-    print "Enter a function (like 'p1()') or type 'quit' to stop."
+    print  "Enter a function (like 'p1()') or type 'quit' to stop."
     while True:
         try:
             fxn = raw_input("Enter a function to run: ")
