@@ -103,17 +103,13 @@ def p32():
     HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum. 
     """
     pan_found = set([0])
-    digits_avail_1 = set(['1','2','3','4','5','6','7','8','9'])  
-    for d1 in digits_avail_1:
-        digits_avail_2 = digits_avail_1 - set([d1])
-        for d2 in digits_avail_2:
-            digits_avail_3 = digits_avail_2 - set([d2])               
-            for d3 in digits_avail_3:
-                digits_avail_4 = digits_avail_3 - set([d3])               
-                for d4 in digits_avail_4:
-                    digits_avail_5 = digits_avail_4 - set([d4])                   
-                    for d5 in digits_avail_5:
-                        digits_avail_6 = digits_avail_5 - set([d5])
+    digits_avail = set(['1','2','3','4','5','6','7','8','9'])  
+    for d1 in digits_avail:
+        for d2 in  digits_avail - set([d1]):             
+            for d3 in digits_avail - set([d1,d2]):            
+                for d4 in digits_avail - set([d1,d2,d3]):                 
+                    for d5 in digits_avail - set([d1,d2,d3,d4]):
+                        digits_avail_6 = digits_avail - set([d1,d2,d3,d4,d5])
                         #Pandigital only possible there are 5 total digits
                         #   in the multiplicands.
                         #Only check for 1 digit X 4 digit and 2 digit * 3 digit
@@ -211,6 +207,8 @@ def pall(determine_problem_count=False):
             in_unsolved_block = True
             if lowest_unsolved_problem == 0:
                 lowest_unsolved_problem = pnum
+    if in_unsolved_block:
+         print '*** unsolved problem(s) ****'
     print '\nTotal calculation time: {0:>.5f} sec (average: {1:>.5f} sec).'.format(total_calc_time, total_calc_time/solved_problems)
     print 'It turns out that problem {0} took the longest time to calculate ({1:>.5f} sec).'.format(max_calc_problem, max_calc_time)
     if lowest_unsolved_problem > 0:
