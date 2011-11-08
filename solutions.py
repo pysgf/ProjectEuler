@@ -163,6 +163,34 @@ def p34():
         num +=1
     return fsum
 
+def p35():
+    """The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
+    There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.
+    How many circular primes are there below one million?
+    """
+    primes = set([2])
+    ccount = 0
+    
+    def __dig_rots(num):
+        snum, dig_rots = str(num),[]
+        for i in xrange(1,len(snum)):
+            snum = snum[1::1] + snum[0]
+            dig_rots.append(int(snum))
+        return dig_rots
+    
+    def __is_circular_prime(num):
+        for nval in __dig_rots(num):
+            if nval not in primes: return False
+        return True
+    
+    for n in xrange(3,1000000):
+        if n % 2 and is_prime(n):
+            primes.add(n)
+    for pnum in primes:
+        if __is_circular_prime(pnum): ccount += 1     
+    return ccount
+    
+
 def GetAnswerAndTime(pnum):
     solved = True
     start_time = time.time()
