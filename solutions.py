@@ -103,27 +103,65 @@ def p32():
     HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum. 
     """
     pan_found = set([0])
-    digits_avail = set(['1','2','3','4','5','6','7','8','9'])  
+    
+    def __check_pandig(product,dig_avail):
+        if product < 10000 and set(str(product)) == dig_avail:
+            pan_found.add(product)
+            
+    def __check_pandigset(dg1,dg2,dg3,dg4,dg5, dig_avail):
+        #Only check for 1-digit times 4-digit and 2-digit times 3-digit since commutative property makes others redundant.
+        __check_pandig(int(dg1) * int(dg2+dg3+dg4+dg5), dig_avail)
+        __check_pandig(int(dg1+dg2) * int(dg3+dg4+dg5), dig_avail)     
+              
+    digits_avail = set(['1','2','3','4','5','6','7','8','9'])        
     for d1 in digits_avail:
         for d2 in  digits_avail - set([d1]):             
             for d3 in digits_avail - set([d1,d2]):            
                 for d4 in digits_avail - set([d1,d2,d3]):                 
                     for d5 in digits_avail - set([d1,d2,d3,d4]):
-                        digits_avail_6 = digits_avail - set([d1,d2,d3,d4,d5])
-                        #Pandigital only possible there are 5 total digits
-                        #   in the multiplicands.
-                        #Only check for 1 digit X 4 digit and 2 digit * 3 digit
-                        #   since commutative property makes others redundant.
-                        m1, m2 = int(d1),int(d2+d3+d4+d5)
-                        product = m1 * m2
-                        if product < 10000 and set(str(product)) == digits_avail_6:
-                            pan_found = pan_found.union(set([product]))
-                        m1, m2 = int(d1+d2) , int(d3+d4+d5)
-                        product = m1 * m2
-                        if product < 10000 and set(str(product)) == digits_avail_6:
-                            pan_found = pan_found.union(set([product]))
+                        #Pandigital only possible there are 5 total digits in the multiplicand and multiplier.
+                        __check_pandigset(d1,d2,d3,d4,d5,digits_avail - set([d1,d2,d3,d4,d5]))
     return sum(pan_found)
-                                        
+    
+    
+def p33():
+    """The fraction 49/98 is a curious fraction, as an inexperienced mathematician in attempting to simplify it may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
+    We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
+    There are exactly four non-trivial examples of this type of fraction, less than one in value, and containing two digits in the numerator and denominator.
+    If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
+    """
+    def __do_unorthodox_cancelation(num,den, pnum, pden):
+        snum,sden = str(num),str(den)
+        digint = set(snum).intersection(sden)
+        if len(digint) == 1:
+            sdig=digint.pop()
+            snum1,sden1=snum.replace(sdig,''),sden.replace(sdig,'')
+            if len(snum1) == 1 and len(sden1) == 1:
+                cnum,cden = int(snum1),int(sden1)
+                if num != 10*cnum and num*cden == den*cnum:
+                    return pnum*cnum,pden*cden
+        return pnum,pden
+
+    pnum, pden = 1,1
+    for numerator in xrange(10,99):
+        for denominator in xrange(numerator+1,100):
+            pnum, pden = __do_unorthodox_cancelation(numerator, denominator, pnum, pden)
+    return pden/gcd(pnum,pden)
+
+def p34():
+    """145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
+    Find the sum of all numbers which are equal to the sum of the factorial of their digits.
+    Note: as 1! = 1 and 2! = 2 are not sums they are not included.
+    """
+    
+    facts = [math.factorial(x) for x in xrange(0,10)]
+    fsum = 0
+    num = 3
+    while num/math.log10(num) <= facts[9]:
+        if sum(facts[int(s)] for s in str(num)) == num:
+            fsum += num
+        num +=1
+    return fsum
 
 def GetAnswerAndTime(pnum):
     solved = True
@@ -137,8 +175,11 @@ def GetAnswerAndTime(pnum):
     ctime = time.time() - start_time
     return solved, ans, ctime
 
+
 def IsProjectEulerProblemPresent(pnum):
+    #print '        ** IsProjectEulerProblemPresent({0}) has been called'.format(pnum)
     problem_present = True
+    presence_determined = False
     with closing(urllib.urlopen('http://projecteuler.net/problem={0}'.format(pnum))) as page: 
         try:
             for lines in page.readlines():
@@ -146,32 +187,57 @@ def IsProjectEulerProblemPresent(pnum):
                 # which contains text 'Go to Problem'
                 if re.search('go to problem', lines, re.IGNORECASE):
                     problem_present = False
+                    presence_determined = True
                     break
                 else:
-                    #problem pages have the text confirmation code
-                    if re.search('confirmation_code:', lines, re.IGNORECASE):
+                    #problem pages have the problem name in their title
+                    if re.search('<title>Problem ' + str(pnum), lines, re.IGNORECASE):
+                        problem_present = True
+                        presence_determined = True
                         break;
         except:
-            problem_present = False
-    return problem_present
- 
-def GetNumberOfProjectEulerProblems():
-    guess_pnum = 2**14
-    guess_inc = 2**13
-    present_pnum = 0
-    #Do simple binary search for problems
+            presence_determined = False
+    if not presence_determined:
+        print '        ** Presence not determined for problem {0}'.format(pnum)
+    return presence_determined, problem_present
+
+def GetNumberOfProjectEulerProblems(use_default_problem_count):
+    default_pnum = 357
+    if use_default_problem_count: return default_pnum
+    presumed_present_pnum = default_pnum
+    guess_inc = 1
+    max_guess_inc = 2**14
+    #Do an increasing binary search for a problem that is not present
+    while guess_inc <= max_guess_inc:
+        guess_pnum = presumed_present_pnum + guess_inc
+        presence_determined, problem_present = IsProjectEulerProblemPresent(guess_pnum)
+        if not presence_determined: return default_pnum       
+        if not problem_present: break
+        guess_inc *= 2
+    if guess_inc > max_guess_inc: return default_pnum     #we have gone very high and still haven't found the end so give up and use default (something is wrong)
+    if guess_inc == 1: return presumed_present_pnum      #first try was a miss so return what was presumed to exist
+    missing_pnum = guess_pnum
+    guess_pnum -= guess_inc/2       #retreat half way back to last existing problem
+    guess_inc /=4                   #only need to use 1/4 inc to reach lowest nonexisting problem
+    #Do binary search for lowest problem that doesn't exist
     while guess_inc >= 1:
-        if IsProjectEulerProblemPresent(guess_pnum):
-            present_pnum = guess_pnum
+        presence_determined, problem_present = IsProjectEulerProblemPresent(guess_pnum)
+        if not presence_determined: return default_pnum
+        if problem_present:
             guess_pnum += guess_inc
         else:
+            missing_pnum = guess_pnum
             guess_pnum -= guess_inc
         guess_inc /= 2
-    if IsProjectEulerProblemPresent(guess_pnum):
-        present_pnum = guess_pnum
-    return present_pnum
+    presence_determined, problem_present = IsProjectEulerProblemPresent(guess_pnum)
+    if not presence_determined: return default_pnum   
+    if not problem_present: missing_pnum = guess_pnum
+    guess_pnum = missing_pnum - 1
+    if guess_pnum > default_pnum:
+        print '        ** Problem count ({0}) greater than default problem count ({1}).'.format(guess_pnum, default_pnum)     
+    return guess_pnum
 
-def pall(determine_problem_count=False):
+def pall(determine_problem_count=True):
     """Calculates solutions to all problems and prints stataistics.
     """
     print '-----------------------------------------------------------------\n' \
@@ -180,10 +246,10 @@ def pall(determine_problem_count=False):
         #This should take around 20 seconds or less on a broadband connection.
         print '\n    Determining problem count...'
         start_time = time.time()
-        num_problems = GetNumberOfProjectEulerProblems()
+        num_problems = GetNumberOfProjectEulerProblems(False)
         print '    ...determination took {0:.2f} seconds.\n'.format(time.time() - start_time)
     else:
-        num_problems = 356
+        num_problems = GetNumberOfProjectEulerProblems(True)
         
     solved_problems = 0
     total_calc_time = 0.0
@@ -218,10 +284,14 @@ def pall(determine_problem_count=False):
     return ''
 
 def pallc(): return pall(True)
+def palld(): return pall(False)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        print eval('p{0}()'.format(sys.argv[1]))
+        if '(' in sys.argv[1]:
+            print eval(sys.argv[1])
+        else:
+            print eval('p{0}()'.format(sys.argv[1]))
     else:
        print "Enter a function (like 'p1()') or type 'quit' to stop."
        while True:
