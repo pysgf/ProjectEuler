@@ -4,6 +4,7 @@ Collection of helper functions for Project Euler solutions.
 
 """
 import math
+import operator
 
 
 def factors(n):
@@ -16,14 +17,10 @@ def factors(n):
 
 
 def fib(n):
-    memo_dict = {0: 1, 1: 1}
-
-    def __aux(n):
-        if n not in memo_dict:
-            memo_dict[n] = __aux(n - 1) + __aux(n - 2)
-        return memo_dict[n]
-
-    return __aux(n)
+    a, b, = 1, 1
+    for i in xrange(3, n + 1):
+        a, b = b, a + b
+    return b
 
 
 def gcd(a, b):
@@ -41,12 +38,20 @@ def is_prime(n):
     if n == 1 or not n % 2:
         return False
 
-
     for j in xrange(3, int(math.sqrt(n)) + 1, 2):
         if not n % j:
             return False
+
     return True
 
 
 def lcm(a, b):
     return abs(a * b) / gcd(a, b)
+
+
+def product(xs):
+    return reduce(operator.mul, xs)
+
+
+def pandigital(mynum):
+    return all([str(x) in list(str(mynum)) for x in xrange(1, len(str(mynum)) + 1)])
