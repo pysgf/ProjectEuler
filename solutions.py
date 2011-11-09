@@ -106,6 +106,11 @@ def p9():
             if a + b + c == 1000:
                 return a * b * c
 
+def p16():
+    """Find the sum of the digits in the number 2^1000"""
+    return sum(int(x) for x in list(str(2**1000)))
+
+
 def p20():
     """Find the sum of the digits in 100!"""
     return sum(int(x) for x in list(str(math.factorial(100))))
