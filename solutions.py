@@ -227,6 +227,43 @@ def p36():
                 pal_sum += num
   
     return pal_sum
+
+def p37():
+    """The number 3797 has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7. Similarly we can work from right to left: 3797, 379, 37, and 3.
+    Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
+    NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
+    """
+    
+    primes = set([2])
+    tcount = 0
+    tsum = 0
+    
+    def __trunc_nums(num):
+        snuml, trunc_num_list = str(num), set([])
+        snumr = snuml
+        for i in xrange(1,len(snuml)):
+            snuml = snuml[1:]
+            snumr = snumr[0:-1]
+            trunc_num_list.add(int(snumr))
+            trunc_num_list.add(int(snuml))
+        return trunc_num_list
+    
+    def __is_trunc_prime(num):
+        for ptnum in list(__trunc_nums(num)):
+            if ptnum not in primes: return False
+        return True        
+
+    num = 1
+    while tcount < 11:
+        num += 2
+        if is_prime(num):
+            primes.add(num)
+            if num > 10 and len(set('0468').intersection(str(num))) == 0 and __is_trunc_prime(num):
+                tcount += 1
+                tsum += num
+    
+        
+    return tsum
     
 
 def p48():
