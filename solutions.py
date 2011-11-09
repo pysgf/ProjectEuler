@@ -96,6 +96,7 @@ def p8():
 
     return prod
 
+
 def p9():
     for n in xrange(999):
         for m in xrange(999):
@@ -203,6 +204,29 @@ def p35():
     for pnum in primes:
         if __is_circular_prime(pnum): ccount += 1     
     return ccount
+
+def p36():
+    """The decimal number, 585 = 10010010012 (binary), is palindromic in both bases.
+    Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
+    (Please note that the palindromic number, in either base, may not include leading zeros.)
+    """
+    
+    pal_sum = 0
+    
+    def __is_base_2_pal(num):
+        snum = '{0:b}'.format(num)
+        return snum == snum[::-1]
+    
+    def __is_base_10_pal(num):
+        snum = '{0:d}'.format(num)
+        return snum == snum[::-1]
+    
+    for num in xrange(1, 1000000):
+        if __is_base_2_pal(num):
+            if __is_base_10_pal(num):
+                pal_sum += num
+  
+    return pal_sum
     
 
 def GetAnswerAndTime(pnum):
