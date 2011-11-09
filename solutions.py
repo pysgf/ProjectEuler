@@ -118,6 +118,12 @@ def p20():
     """Find the sum of the digits in 100!"""
     return sum(int(x) for x in list(str(math.factorial(100))))
 
+def p25():
+    n = 1
+    while True:
+        if len(str(fib(n))) >= 1000:
+            return n
+        n += 1
 
 def p11():
     # Calculate Horizontal product

@@ -17,14 +17,10 @@ def factors(n):
 
 
 def fib(n):
-    memo_dict = {0: 1, 1: 1}
-
-    def __aux(n):
-        if n not in memo_dict:
-            memo_dict[n] = __aux(n - 1) + __aux(n - 2)
-        return memo_dict[n]
-
-    return __aux(n)
+    a, b, = 1, 1
+    for i in xrange(3, n + 1):
+        a, b = b, a + b
+    return b
 
 
 def gcd(a, b):
