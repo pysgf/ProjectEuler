@@ -50,3 +50,7 @@ def lcm(a, b):
 
 def product(xs):
     return reduce(operator.mul, xs)
+
+
+def pandigital(mynum):
+    return all([str(x) in list(str(mynum)) for x in xrange(1, len(str(mynum)) + 1)])
