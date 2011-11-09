@@ -4,6 +4,7 @@ Collection of helper functions for Project Euler solutions.
 
 """
 import math
+import operator
 
 
 def factors(n):
@@ -50,3 +51,6 @@ def is_prime(n):
 
 def lcm(a, b):
     return abs(a * b) / gcd(a, b)
+
+def product(xs):
+    return reduce(operator.mul, xs)
