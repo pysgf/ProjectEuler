@@ -35,7 +35,13 @@ def gcd(a, b):
 
 def is_prime(n):
     if n == 2:
-        return 2
+        return True
+
+    # We want to skip anything that is even.
+    if n == 1 or not n % 2:
+        return False
+
+
     for j in xrange(3, int(math.sqrt(n)) + 1, 2):
         if not n % j:
             return False

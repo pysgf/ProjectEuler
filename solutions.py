@@ -107,8 +107,7 @@ def p9():
 
 
 def p10(n=2000000):
-    primes = [p for p in xrange(0, n) if is_prime(p)]
-    return reduce((lambda a, b: a + b), primes)
+    return sum([p for p in xrange(0, n) if is_prime(p)])
 
 
 def p32():
