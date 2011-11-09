@@ -96,6 +96,15 @@ def p8():
 
     return prod
 
+def p9():
+    for n in xrange(999):
+        for m in xrange(999):
+            a = (m ** 2) - (n ** 2)
+            b = 2 * m * n
+            c = (m ** 2) + (n ** 2)
+            if a + b + c == 1000:
+                return a * b * c
+
 def p32():
     """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
     The product 7254 is unusual, as the identity, 39 x 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
