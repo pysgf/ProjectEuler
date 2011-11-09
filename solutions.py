@@ -96,6 +96,11 @@ def p8():
 
     return prod
 
+def p20():
+    """Find the sum of the digits in 100!"""
+    return sum(int(x) for x in list(str(math.factorial(100))))
+
+
 def p32():
     """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
     The product 7254 is unusual, as the identity, 39 x 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
