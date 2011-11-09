@@ -105,6 +105,12 @@ def p9():
             if a + b + c == 1000:
                 return a * b * c
 
+
+def p10(n=2000000):
+    primes = [p for p in xrange(0, n) if is_prime(p)]
+    return reduce((lambda a, b: a + b), primes)
+
+
 def p32():
     """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
     The product 7254 is unusual, as the identity, 39 x 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
