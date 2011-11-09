@@ -210,6 +210,10 @@ def p35():
     return ccount
     
 
+def p48():
+    """Find the last ten digits of the number 1^1 ....1000^1000"""
+    return str(sum(x**x for x in xrange(1, 1001)))[-10:]
+
 def GetAnswerAndTime(pnum):
     solved = True
     start_time = time.time()
