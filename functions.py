@@ -34,9 +34,7 @@ def gcd(a, b):
 
 
 def is_prime(n):
-    if n == 2:
-        return 2
-    for j in xrange(3, int(math.sqrt(n)) + 1, 2):
+    for j in xrange(2, int(math.sqrt(n)) + 1):
         if not n % j:
             return False
     return True
