@@ -38,15 +38,16 @@ def is_prime(n):
     if n == 1 or not n % 2:
         return False
 
-
     for j in xrange(3, int(math.sqrt(n)) + 1, 2):
         if not n % j:
             return False
+
     return True
 
 
 def lcm(a, b):
     return abs(a * b) / gcd(a, b)
+
 
 def product(xs):
     return reduce(operator.mul, xs)
