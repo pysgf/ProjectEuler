@@ -183,14 +183,14 @@ def p32():
         __check_pandig(int(dg1) * int(dg2+dg3+dg4+dg5), dig_avail)
         __check_pandig(int(dg1+dg2) * int(dg3+dg4+dg5), dig_avail)     
               
-    digits_avail = set(['1', '2', '3', '4', '5', '6', '7', '8', '9'])        
+    digits_avail = set('123456789')        
     for d1 in digits_avail:
-        for d2 in  digits_avail - set([d1]):             
-            for d3 in digits_avail - set([d1, d2]):            
-                for d4 in digits_avail - set([d1, d2, d3]):                 
-                    for d5 in digits_avail - set([d1, d2, d3, d4]):
+        for d2 in  digits_avail - set(d1):             
+            for d3 in digits_avail - set(d1 + d2):            
+                for d4 in digits_avail - set(d1 + d2 + d3):                 
+                    for d5 in digits_avail - set(d1 + d2 + d3 + d4):
                         #Pandigital only possible there are 5 total digits in the multiplicand and multiplier.
-                        __check_pandigset(d1,d2,d3,d4,d5,digits_avail - set([d1, d2, d3, d4, d5]))
+                        __check_pandigset(d1,d2,d3,d4,d5,digits_avail - set(d1 + d2 + d3 + d4 + d5))
                         
     return sum(pan_found)
     
@@ -411,6 +411,33 @@ def p40():
         clen = __appended_num_len(num, clen)
         
     return reduce(operator.mul, dvals)
+    
+
+def p41():
+    """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once. For example, 2143 is a 4-digit pandigital and is also prime.
+    What is the largest n-digit pandigital prime that exists?"""
+    
+    overall_max_pandig = 0
+    
+    def __for_digs(chosen_digs, digits_avail, max_pandig):
+        for d1 in digits_avail:
+            if len(digits_avail) == 1 and  d1 not in '24568':
+                tnum = int(chosen_digs + d1)
+                if is_prime(tnum):
+                    if tnum >max_pandig:
+                        max_pandig = tnum
+            else:
+                max_pandig = __for_digs(chosen_digs + d1, digits_avail - set(d1), max_pandig)
+                
+        return  max_pandig
+            
+    for n in xrange(9, 0, -1):
+        overall_max_pandig = max(overall_max_pandig, __for_digs('',set(''.join([str(i) for i in xrange(1, n+1)])), 0))
+        if overall_max_pandig > 0:
+            break;
+
+    return overall_max_pandig
+    
 
 def p48():
     """Find the last ten digits of the number 1^1 ....1000^1000"""
