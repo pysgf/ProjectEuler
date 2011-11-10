@@ -323,6 +323,95 @@ def p37():
     return tsum
  
 
+def p38():
+    """Take the number 192 and multiply it by each of 1, 2, and 3:
+        192 x 1 = 192
+        192 x 2 = 384
+        192 x 3 = 576
+    By concatenating each product we get the 1 to 9 pandigital, 192384576. We will call 192384576 the concatenated product of 192 and (1,2,3)
+    The same can be achieved by starting with 9 and multiplying by 1, 2, 3, 4, and 5, giving the pandigital, 918273645, which is the concatenated product of 9 and (1,2,3,4,5).
+    What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with (1,2, ... , n) where n > 1?"""
+    pan_max = 0
+    all_digs = set('123456789')
+    
+    def __calc_concat_prod_str_list(num, seq_list):
+        prods = [str(num * x) for x in seq_list]
+        return ''.join(prods)
+        
+    def __prod_len_and_is_pandig_set(pstr):
+        if len(pstr) == 9:
+            return 9, len(all_digs - set(pstr)) == 0
+        return len(pstr), False
+
+    #Clearly, when using concat prod with (1,2,.., n) then  n must be 9 or less
+    for n in xrange(2,10):
+        seq_list = xrange(1,n+1)
+        prod_len = 0
+        #Start with a large number that will yet result in less than a 9 digit product, so we cover all numbers with low waste.
+        mult = max(1, 10 ** (5 - n))
+        while prod_len <= 9:
+            pstr = __calc_concat_prod_str_list(mult, seq_list)
+            prod_len, is_pan_dig = __prod_len_and_is_pandig_set(pstr)
+            if is_pan_dig:
+                pnum = int(pstr)
+                if pnum > pan_max:
+                    pan_max = pnum
+            mult += 1
+
+    return pan_max
+
+
+def p39():
+    """If p is the perimeter of a right angle triangle with integral length sides, {a,b,c}, there are exactly three solutions for p = 120.
+    {20,48,52}, {24,45,51}, {30,40,50}
+    For which value of p <= 1000, is the number of solutions maximised?"""
+        
+    def _get_b_for_perim_p(p, a):
+        # Calc b based on solving equation a + b + sqrt(a ** 2 + b ** 2) = p
+        # Also return whether number is integral
+        num, den = p * (p - 2 * a), 2 * (p - a)
+        is_int = not num % den
+        return is_int, num / den
+    
+    max_sols = 0
+    max_p = 0
+    
+    for p in xrange(1, 1001):
+        num_sols = 0
+        for a in xrange(1, p):
+            is_int, b = _get_b_for_perim_p(p, a)
+            if is_int:
+                num_sols += 1
+        
+        if num_sols > max_sols:
+            max_sols = num_sols
+            max_p = p
+    
+    return max_p
+
+
+def p40():
+    """An irrational decimal fraction is created by concatenating the positive integers:
+    0.123456789101112131415161718192021...
+    It can be seen that the 12th digit of the fractional part is 1.
+    If dn represents the nth digit of the fractional part, find the value of the following expression.
+    d1 x d10 x d100 x d1000 x d10000 x d100000 x d1000000"""
+    
+    dvals = [0, 0, 0, 0, 0, 0, 0]
+    def __appended_num_len(num, cur_len):
+        snum = str(num)
+        new_len = cur_len + len(snum)
+        for dnum in xrange(0, 7):
+            if cur_len < 10 ** dnum <= new_len:
+                dvals[dnum] = int(snum[10 ** dnum - cur_len - 1])
+        return new_len
+        
+    clen = 0
+    for num in xrange(1, 10 ** 6):
+        clen = __appended_num_len(num, clen)
+        
+    return reduce(operator.mul, dvals)
+
 def p48():
     """Find the last ten digits of the number 1^1 ....1000^1000"""
     return str(sum(x**x for x in xrange(1, 1001)))[-10:]
