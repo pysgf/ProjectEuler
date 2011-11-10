@@ -171,12 +171,11 @@ def p32():
     """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
     The product 7254 is unusual, as the identity, 39 x 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
     Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
-    HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum. 
-    """
+    HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum."""
     pan_found = set([0])
     
     def __check_pandig(product,dig_avail):
-        if product < 10000 and set(str(product)) == dig_avail:
+        if product < 10 ** 5 and set(str(product)) == dig_avail:
             pan_found.add(product)
             
     def __check_pandigset(dg1,dg2,dg3,dg4,dg5, dig_avail):
@@ -184,14 +183,15 @@ def p32():
         __check_pandig(int(dg1) * int(dg2+dg3+dg4+dg5), dig_avail)
         __check_pandig(int(dg1+dg2) * int(dg3+dg4+dg5), dig_avail)     
               
-    digits_avail = set(['1','2','3','4','5','6','7','8','9'])        
+    digits_avail = set(['1', '2', '3', '4', '5', '6', '7', '8', '9'])        
     for d1 in digits_avail:
         for d2 in  digits_avail - set([d1]):             
-            for d3 in digits_avail - set([d1,d2]):            
-                for d4 in digits_avail - set([d1,d2,d3]):                 
-                    for d5 in digits_avail - set([d1,d2,d3,d4]):
+            for d3 in digits_avail - set([d1, d2]):            
+                for d4 in digits_avail - set([d1, d2, d3]):                 
+                    for d5 in digits_avail - set([d1, d2, d3, d4]):
                         #Pandigital only possible there are 5 total digits in the multiplicand and multiplier.
-                        __check_pandigset(d1,d2,d3,d4,d5,digits_avail - set([d1,d2,d3,d4,d5]))
+                        __check_pandigset(d1,d2,d3,d4,d5,digits_avail - set([d1, d2, d3, d4, d5]))
+                        
     return sum(pan_found)
     
     
@@ -199,52 +199,53 @@ def p33():
     """The fraction 49/98 is a curious fraction, as an inexperienced mathematician in attempting to simplify it may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
     We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
     There are exactly four non-trivial examples of this type of fraction, less than one in value, and containing two digits in the numerator and denominator.
-    If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
-    """
+    If the product of these four fractions is given in its lowest common terms, find the value of the denominator."""
     def __do_unorthodox_cancelation(num,den, pnum, pden):
-        snum,sden = str(num),str(den)
+        snum, sden = str(num), str(den)
         digint = set(snum).intersection(sden)
         if len(digint) == 1:
             sdig=digint.pop()
-            snum1,sden1=snum.replace(sdig,''),sden.replace(sdig,'')
+            snum1, sden1= snum.replace(sdig, ''),sden.replace(sdig, '')
             if len(snum1) == 1 and len(sden1) == 1:
-                cnum,cden = int(snum1),int(sden1)
-                if num != 10*cnum and num*cden == den*cnum:
-                    return pnum*cnum,pden*cden
-        return pnum,pden
+                cnum, cden = int(snum1), int(sden1)
+                if num != 10 * cnum and num * cden == den * cnum:
+                    return pnum * cnum, pden * cden
+                
+        return pnum, pden
 
-    pnum, pden = 1,1
-    for numerator in xrange(10,99):
-        for denominator in xrange(numerator+1,100):
+    pnum, pden = 1, 1
+    for numerator in xrange(10, 99):
+        for denominator in xrange(numerator + 1, 100):
             pnum, pden = __do_unorthodox_cancelation(numerator, denominator, pnum, pden)
-    return pden/gcd(pnum,pden)
+            
+    return pden / gcd(pnum, pden)
+
 
 def p34():
     """145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
     Find the sum of all numbers which are equal to the sum of the factorial of their digits.
-    Note: as 1! = 1 and 2! = 2 are not sums they are not included.
-    """
-    
-    facts = [math.factorial(x) for x in xrange(0,10)]
+    Note: as 1! = 1 and 2! = 2 are not sums they are not included."""
+    facts = [math.factorial(x) for x in xrange(0, 10)]
     fsum = 0
     num = 3
-    while num/math.log10(num) <= facts[9]:
+    while num / math.log10(num) <= facts[9]:
         if sum(facts[int(s)] for s in str(num)) == num:
             fsum += num
-        num +=1
+        num += 1
+        
     return fsum
+
 
 def p35():
     """The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
     There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.
-    How many circular primes are there below one million?
-    """
+    How many circular primes are there below one million?"""
     primes = set([2])
     ccount = 0
     
     def __dig_rots(num):
         snum, dig_rots = str(num),[]
-        for i in xrange(1,len(snum)):
+        for i in xrange(1, len(snum)):
             snum = snum[1::1] + snum[0]
             dig_rots.append(int(snum))
         return dig_rots
@@ -254,19 +255,20 @@ def p35():
             if nval not in primes: return False
         return True
     
-    for n in xrange(3,1000000):
+    for n in xrange(3, 10 ** 6):
         if n % 2 and is_prime(n):
             primes.add(n)
+            
     for pnum in primes:
-        if __is_circular_prime(pnum): ccount += 1     
+        if __is_circular_prime(pnum): ccount += 1
+        
     return ccount
+
 
 def p36():
     """The decimal number, 585 = 10010010012 (binary), is palindromic in both bases.
     Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
-    (Please note that the palindromic number, in either base, may not include leading zeros.)
-    """
-    
+    (Please note that the palindromic number, in either base, may not include leading zeros.)"""
     pal_sum = 0
     
     def __is_base_2_pal(num):
@@ -277,18 +279,18 @@ def p36():
         snum = '{0:d}'.format(num)
         return snum == snum[::-1]
     
-    for num in xrange(1, 1000000):
+    for num in xrange(1, 10 ** 6):
         if __is_base_2_pal(num):
             if __is_base_10_pal(num):
                 pal_sum += num
   
     return pal_sum
 
+
 def p37():
     """The number 3797 has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7. Similarly we can work from right to left: 3797, 379, 37, and 3.
     Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
-    NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
-    """
+    NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes."""
     
     primes = set([2])
     tcount = 0
@@ -317,30 +319,32 @@ def p37():
             if num > 10 and len(set('0468').intersection(str(num))) == 0 and __is_trunc_prime(num):
                 tcount += 1
                 tsum += num
-    
         
     return tsum
-    
+ 
 
 def p48():
     """Find the last ten digits of the number 1^1 ....1000^1000"""
     return str(sum(x**x for x in xrange(1, 1001)))[-10:]
 
-def GetAnswerAndTime(pnum):
+
+def get_answer_and_time(pnum):
+    """Call a problem function and time its execution."""
     solved = True
-    start_time = time.time()
+    start_time = time.time()   
     try:
         ans =eval('p%i()' % pnum)
-    except:
+    except StandardError:
         solved = False
         ans = 0
         ctime = 0.0
+        
     ctime = time.time() - start_time
     return solved, ans, ctime
 
 
-def IsProjectEulerProblemPresent(pnum):
-    #print '        ** IsProjectEulerProblemPresent({0}) has been called'.format(pnum)
+def is_project_euler_problem_present(pnum):
+    """Determine whether the given Project Euler problem number exists."""
     problem_present = True
     presence_determined = False
     with closing(urllib.urlopen('http://projecteuler.net/problem={0}'.format(pnum))) as page: 
@@ -358,61 +362,86 @@ def IsProjectEulerProblemPresent(pnum):
                         problem_present = True
                         presence_determined = True
                         break;
-        except:
+        except StandardError:
             presence_determined = False
+            
     if not presence_determined:
         print '        ** Presence not determined for problem {0}'.format(pnum)
+
     return presence_determined, problem_present
 
-def GetNumberOfProjectEulerProblems(use_default_problem_count):
+
+def get_number_of_project_euler_problems(use_default_problem_count):
+    """Determine the current number of Project Euler problems."""
     default_pnum = 357
-    if use_default_problem_count: return default_pnum
+    if use_default_problem_count:
+        return default_pnum
     presumed_present_pnum = default_pnum
     guess_inc = 1
-    max_guess_inc = 2**14
+    max_guess_inc = 2 ** 14
+    
+    #Note: This approach presumes that the number of problems never decreases.
+    #If it does decrease then the function will return the wrong value (the default value)
+    #until the number of problems increases to the former number which would hopefully be the case.
+    #Taking a decreasing number into account would double the expense of the most common case from 1 page requests to 2 page requests.
     #Do an increasing binary search for a problem that is not present
     while guess_inc <= max_guess_inc:
         guess_pnum = presumed_present_pnum + guess_inc
-        presence_determined, problem_present = IsProjectEulerProblemPresent(guess_pnum)
-        if not presence_determined: return default_pnum       
-        if not problem_present: break
+        presence_determined, problem_present = is_project_euler_problem_present(guess_pnum)
+        if not presence_determined:
+            return default_pnum       
+        if not problem_present:
+            break
         guess_inc *= 2
-    if guess_inc > max_guess_inc: return default_pnum     #we have gone very high and still haven't found the end so give up and use default (something is wrong)
-    if guess_inc == 1: return presumed_present_pnum      #first try was a miss so return what was presumed to exist
+        
+    if guess_inc > max_guess_inc:
+        #we have gone very high and still haven't found the end so give up and use default (something is wrong)
+        return default_pnum
+    if guess_inc == 1:
+        #first try was a miss so return what was presumed to exist
+        return presumed_present_pnum
     missing_pnum = guess_pnum
-    guess_pnum -= guess_inc/2       #retreat half way back to last existing problem
-    guess_inc /=4                   #only need to use 1/4 inc to reach lowest nonexisting problem
+    #retreat half way back to last existing problem
+    guess_pnum -= guess_inc / 2
+    #only need to use 1/4 inc to reach lowest nonexisting problem
+    guess_inc /= 4
+    
     #Do binary search for lowest problem that doesn't exist
     while guess_inc >= 1:
-        presence_determined, problem_present = IsProjectEulerProblemPresent(guess_pnum)
-        if not presence_determined: return default_pnum
+        presence_determined, problem_present = is_project_euler_problem_present(guess_pnum)
+        if not presence_determined:
+            return default_pnum
         if problem_present:
             guess_pnum += guess_inc
         else:
             missing_pnum = guess_pnum
             guess_pnum -= guess_inc
         guess_inc /= 2
+        
     presence_determined, problem_present = IsProjectEulerProblemPresent(guess_pnum)
-    if not presence_determined: return default_pnum   
-    if not problem_present: missing_pnum = guess_pnum
+    if not presence_determined:
+        return default_pnum   
+    if not problem_present:
+        missing_pnum = guess_pnum
     guess_pnum = missing_pnum - 1
     if guess_pnum > default_pnum:
-        print '        ** Problem count ({0}) greater than default problem count ({1}).'.format(guess_pnum, default_pnum)     
+        print '        ** Problem count ({0}) greater than default problem count ({1}).'.format(guess_pnum, default_pnum)
+        
     return guess_pnum
 
-def pall(determine_problem_count=True):
-    """Calculates solutions to all problems and prints stataistics.
-    """
+
+def pall(determine_problem_count = True):
+    """Calculates solutions to all problems and prints stataistics."""
     print '-----------------------------------------------------------------\n' \
         'Calculation of the pySGF solutions to the Project Euler problems:\n'
     if determine_problem_count:
-        #This should take around 20 seconds or less on a broadband connection.
+        #This should take less than 2 seconds or less on a broadband connection.
         print '\n    Determining problem count...'
         start_time = time.time()
-        num_problems = GetNumberOfProjectEulerProblems(False)
+        num_problems = get_number_of_project_euler_problems(False)
         print '    ...determination took {0:.2f} seconds.\n'.format(time.time() - start_time)
     else:
-        num_problems = GetNumberOfProjectEulerProblems(True)
+        num_problems = get_number_of_project_euler_problems(True)
         
     solved_problems = 0
     total_calc_time = 0.0
@@ -420,14 +449,15 @@ def pall(determine_problem_count=True):
     max_calc_problem = 0
     lowest_unsolved_problem = 0
     in_unsolved_block = False
-    for pnum in xrange(1,num_problems + 1):
-        solved, ans, ctime = GetAnswerAndTime(pnum)
+    
+    for pnum in xrange(1, num_problems + 1):
+        solved, ans, ctime = get_answer_and_time(pnum)
         if solved:
             solved_problems += 1
             total_calc_time += ctime
             if ctime > max_calc_time:
                 max_calc_time = ctime
-                max_calc_problem = pnum
+                max_calc_problem = pnum     
             if in_unsolved_block:
                  print '*** unsolved problem(s) ****'
             in_unsolved_block = False
@@ -436,6 +466,7 @@ def pall(determine_problem_count=True):
             in_unsolved_block = True
             if lowest_unsolved_problem == 0:
                 lowest_unsolved_problem = pnum
+                
     if in_unsolved_block:
          print '*** unsolved problem(s) ****'
     print '\nTotal calculation time: {0:>.5f} sec (average: {1:>.5f} sec).'.format(total_calc_time, total_calc_time/solved_problems)
@@ -444,10 +475,17 @@ def pall(determine_problem_count=True):
         print 'The lowest numbered unsolved problem is problem {0}.'.format(lowest_unsolved_problem)
     print '\nHappily, {0} of {1} problems have been solved ({2:>.3} %). {3} problems remain unsolved.'.format(solved_problems, num_problems, 100*float(solved_problems)/num_problems, num_problems-solved_problems)
     print '\n-----------------------------------------------------------------'
+
     return ''
 
-def pallc(): return pall(True)
-def palld(): return pall(False)
+
+def pallc():
+    """Calculates solutions to all problems, determining the number of Project Euler problems beforehand."""
+    return pall(True)
+    
+def palld():
+    """Calculates solutions to all problems, using the default number of Project Euler problems beforehand."""
+    return pall(False)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
