@@ -8,6 +8,7 @@ import re
 import sys
 import time
 import urllib
+import csv
 from contextlib import closing
 
 from data import *
@@ -224,16 +225,25 @@ def p33():
 def p34():
     """145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
     Find the sum of all numbers which are equal to the sum of the factorial of their digits.
-    Note: as 1! = 1 and 2! = 2 are not sums they are not included."""
-    facts = [math.factorial(x) for x in xrange(0, 10)]
-    fsum = 0
-    num = 3
-    while num / math.log10(num) <= facts[9]:
-        if sum(facts[int(s)] for s in str(num)) == num:
-            fsum += num
-        num += 1
+    Note: as 1! = 1 and 2! = 2 are not sums they are not included.""" 
+    fsum = [0]
+    fkeys = list('0123456789')
+    fvalues = [math.factorial(x) for x in xrange(0, 10)]
+    facts = {x:y for x, y in zip(fkeys, fvalues)}
+
+    def __search_for_curious_nums(digs):
+        nmax = min(facts['9'] * digs, 10 ** digs - 1)
+        for tnum in xrange(10 ** (digs - 1), nmax + 1):
+            if sum(facts[s] for s in str(tnum)) == tnum:
+                fsum[0] += tnum            
+  
+    dig_cnt = 2
+    # Loop number of digits in number up until even 99....999 gives a sum-of-factorial-digits that is too small
+    while 10 ** dig_cnt - 1 <= dig_cnt * facts['9']:
+        __search_for_curious_nums(dig_cnt)
+        dig_cnt += 1
         
-    return fsum
+    return fsum[0]
 
 
 def p35():
@@ -286,42 +296,41 @@ def p36():
   
     return pal_sum
 
-
+ 
 def p37():
     """The number 3797 has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7. Similarly we can work from right to left: 3797, 379, 37, and 3.
     Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
     NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes."""
     
-    primes = set([2])
     tcount = 0
     tsum = 0
     
-    def __trunc_nums(num):
-        snuml, trunc_num_list = str(num), set([])
-        snumr = snuml
-        for i in xrange(1,len(snuml)):
-            snuml = snuml[1:]
-            snumr = snumr[0:-1]
-            trunc_num_list.add(int(snumr))
-            trunc_num_list.add(int(snuml))
-        return trunc_num_list
+    def __next_longer_r_tprimes(cur_r_tprimes):
+        next_tprimes = set()
+        for tprime in cur_r_tprimes:
+            next_tprimes.update([tprime + s for s in '1379' if is_prime(int(tprime + s))])
+        return next_tprimes
+        
+    def __next_longer_l_tprimes(cur_l_tprimes):
+        next_tprimes = set()
+        for tprime in cur_l_tprimes:
+            next_tprimes.update([s + tprime for s in '123456789' if is_prime(int(s + tprime))])
+        return next_tprimes
     
-    def __is_trunc_prime(num):
-        for ptnum in list(__trunc_nums(num)):
-            if ptnum not in primes: return False
-        return True        
-
-    num = 1
-    while tcount < 11:
-        num += 2
-        if is_prime(num):
-            primes.add(num)
-            if num > 10 and len(set('0468').intersection(str(num))) == 0 and __is_trunc_prime(num):
-                tcount += 1
-                tsum += num
+    l_tprimes = set('2357')
+    r_tprimes = l_tprimes
+    #Starting with the single digit left truncatable primes and right truncatable primes,
+    #determine the next longer left and right truncatable primes and then the 'left-right' ones.
+    #Keep going until there are no more left- or no more right- truncatable primes to build on.
+    while len(l_tprimes) * len(r_tprimes) > 0:
+        l_tprimes = __next_longer_l_tprimes(l_tprimes)
+        r_tprimes = __next_longer_r_tprimes(r_tprimes)
+        lr_tprimes = l_tprimes.intersection(r_tprimes)
+        if len(lr_tprimes) > 0:
+            tcount += len(lr_tprimes)
+            tsum += reduce(lambda x,y: int(x) + int(y),lr_tprimes, '0')
         
     return tsum
- 
 
 def p38():
     """Take the number 192 and multiply it by each of 1, 2, and 3:
@@ -411,33 +420,55 @@ def p40():
         clen = __appended_num_len(num, clen)
         
     return reduce(operator.mul, dvals)
-    
+       
 
 def p41():
     """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once. For example, 2143 is a 4-digit pandigital and is also prime.
     What is the largest n-digit pandigital prime that exists?"""
     
-    overall_max_pandig = 0
+    overall_max_pandig = [0]
     
-    def __for_digs(chosen_digs, digits_avail, max_pandig):
+    def __for_digs(chosen_digs, digits_avail):
         for d1 in digits_avail:
             if len(digits_avail) == 1 and  d1 not in '24568':
                 tnum = int(chosen_digs + d1)
                 if is_prime(tnum):
-                    if tnum >max_pandig:
-                        max_pandig = tnum
+                    if tnum >overall_max_pandig[0]:
+                        overall_max_pandig[0] = tnum
             else:
-                max_pandig = __for_digs(chosen_digs + d1, digits_avail - set(d1), max_pandig)
-                
-        return  max_pandig
+                __for_digs(chosen_digs + d1, digits_avail - set(d1))
             
     for n in xrange(9, 0, -1):
-        overall_max_pandig = max(overall_max_pandig, __for_digs('',set(''.join([str(i) for i in xrange(1, n+1)])), 0))
-        if overall_max_pandig > 0:
+        __for_digs('',set(''.join([str(i) for i in xrange(1, n+1)])))
+        if overall_max_pandig[0] > 0:
             break;
 
-    return overall_max_pandig
+    return overall_max_pandig[0]
+
+
+def p42():
+    """The nth term of the sequence of triangle numbers is given by, tn = (1/2)n(n+1); so the first ten triangle numbers are:
+    1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...
+    By converting each letter in a word to a number corresponding to its alphabetical position and adding these values we form a word value. For example, the word value for SKY is 19 + 11 + 25 = 55 = t10. If the word value is a triangle number then we shall call the word a triangle word.
+    Using words.txt (right click and 'Save Link/Target As...'), a 16K text file containing nearly two-thousand common English words, how many are triangle words?
+    """
+    let_keys = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    let_vals = range(1, 27)
+    let_dict = {x:y for x, y in zip(let_keys, let_vals)}
+    tnumbers = set([n * (n + 1) / 2 for n in xrange(1, 100)])
+    triangle_word_count = [0]
     
+    def __check_word_for_triangle(word):
+        if sum(let_dict[let] for let in word) in tnumbers:
+            triangle_word_count[0] = triangle_word_count[0] + 1
+
+    word_reader = csv.reader(open('words.txt', 'rb'), delimiter=',', quotechar='"')
+    for word_list in word_reader:
+        for word in word_list:
+            __check_word_for_triangle(word)      
+         
+    return triangle_word_count[0]
+
 
 def p48():
     """Find the last ten digits of the number 1^1 ....1000^1000"""
@@ -463,8 +494,8 @@ def is_project_euler_problem_present(pnum):
     """Determine whether the given Project Euler problem number exists."""
     problem_present = True
     presence_determined = False
-    with closing(urllib.urlopen('http://projecteuler.net/problem={0}'.format(pnum))) as page: 
-        try:
+    try:
+        with closing(urllib.urlopen('http://projecteuler.net/problem={0}'.format(pnum))) as page: 
             for lines in page.readlines():
                 # If a problem is not present project euler reverts to problems page
                 # which contains text 'Go to Problem'
@@ -478,9 +509,10 @@ def is_project_euler_problem_present(pnum):
                         problem_present = True
                         presence_determined = True
                         break;
-        except StandardError:
-            presence_determined = False
-            
+    
+    except StandardError:
+       presence_determined = False
+       
     if not presence_determined:
         print '        ** Presence not determined for problem {0}'.format(pnum)
 
