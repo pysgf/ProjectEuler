@@ -16,6 +16,29 @@ def factors(n):
     return xs
 
 
+def flatten(x):
+    result = []
+    for el in x:
+        if hasattr(el, "__iter__") and not isinstance(el, basestring):
+            result.extend(flatten(el))
+        else:
+            result.append(el)
+    return result
+
+def prime_factors(n):
+    
+    p_factors = set()
+    
+    def __split_num_into_factors(num):
+        if num > 3:
+            for can_fact in xrange(2, int(math.sqrt(num)) + 1):
+                if not num % can_fact:
+                    return [__split_num_into_factors(can_fact), __split_num_into_factors(num / can_fact)]
+    
+        return [num]
+     
+    return list(set().union(flatten(__split_num_into_factors(n))))
+
 def fib(n):
     a, b, = 1, 1
     for i in xrange(3, n + 1):
