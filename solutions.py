@@ -462,7 +462,7 @@ def p42():
         if sum(let_dict[let] for let in word) in tnumbers:
             triangle_word_count[0] = triangle_word_count[0] + 1
 
-    word_reader = csv.reader(open('words.txt', 'rb'), delimiter = ',', quotechar = '"')
+    word_reader = csv.reader(open('p42_words.txt', 'rb'), delimiter = ',', quotechar = '"')
     for word_list in word_reader:
         for word in word_list:
             __check_word_for_triangle(word)      
@@ -653,7 +653,30 @@ def p47():
 def p48():
     """Find the last ten digits of the number 1^1 ....1000^1000"""
     return str(sum(x**x for x in xrange(1, 1001)))[-10:]
+    
+def p49():
+    """The arithmetic sequence, 1487, 4817, 8147, in which each of the terms increases by 3330, is unusual in two ways: (i) each of the three terms are prime, and, (ii) each of the 4-digit numbers are permutations of one another.
+    There are no arithmetic sequences made up of three 1-, 2-, or 3-digit primes, exhibiting this property, but there is one other 4-digit increasing sequence.
+    What 12-digit number do you form by concatenating the three terms in this sequence?"""     
+    
+    def __is_list_equal_diff(num_list):
+        diffs = [num_list[vindex + 1] - num_list[vindex] for vindex in range(len(num_list) - 1)]
+        return all(dval == diffs[0] for dval in diffs)   
 
+    def __get_other_special_sequence(num):
+        unique_num_perms = set().union(list(int(''.join(x)) for x in itertools.permutations(str(num),len(str(num)))))
+        sorted_bigger_prime_unique_num_perms = sorted(vp for vp in unique_num_perms if vp >= num and is_prime(vp))
+        if (len(sorted_bigger_prime_unique_num_perms) >= 3):
+            combos = list(itertools.combinations(sorted_bigger_prime_unique_num_perms, 3))
+            valid_combos = [com for com in combos if __is_list_equal_diff(com)]
+            if (len(valid_combos) > 0 and valid_combos[0][0] != 1487):
+                return valid_combos[0]
+        return None
+    
+    for num in xrange(1000, 10000):
+        seq = __get_other_special_sequence(num)
+        if seq != None:
+            return str(reduce(lambda x,y: int(str(x) + str(y)), seq))
 
 def get_answer_and_time(pnum):
     """Call a problem function and time its execution."""
@@ -701,7 +724,7 @@ def is_project_euler_problem_present(pnum):
 
 def get_number_of_project_euler_problems(use_default_problem_count):
     """Determine the current number of Project Euler problems."""
-    default_pnum = 357
+    default_pnum = 359
     if use_default_problem_count:
         return default_pnum
     presumed_present_pnum = default_pnum
@@ -746,7 +769,7 @@ def get_number_of_project_euler_problems(use_default_problem_count):
             guess_pnum -= guess_inc
         guess_inc /= 2
         
-    presence_determined, problem_present = IsProjectEulerProblemPresent(guess_pnum)
+    presence_determined, problem_present = is_project_euler_problem_present(guess_pnum)
     if not presence_determined:
         return default_pnum   
     if not problem_present:
