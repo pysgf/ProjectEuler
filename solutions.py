@@ -653,6 +653,7 @@ def p47():
 def p48():
     """Find the last ten digits of the number 1^1 ....1000^1000"""
     return str(sum(x**x for x in xrange(1, 1001)))[-10:]
+   
     
 def p49():
     """The arithmetic sequence, 1487, 4817, 8147, in which each of the terms increases by 3330, is unusual in two ways: (i) each of the three terms are prime, and, (ii) each of the 4-digit numbers are permutations of one another.
@@ -677,6 +678,45 @@ def p49():
         seq = __get_other_special_sequence(num)
         if seq != None:
             return str(reduce(lambda x,y: int(str(x) + str(y)), seq))
+
+
+def p50():
+    """The prime 41, can be written as the sum of six consecutive primes:
+    41 = 2 + 3 + 5 + 7 + 11 + 13
+    This is the longest sum of consecutive primes that adds to a prime below one-hundred.
+    The longest sum of consecutive primes below one-thousand that adds to a prime, contains 21 terms, and is equal to 953.
+    Which prime, below one-million, can be written as the sum of the most consecutive primes?"""
+     
+    prime_set = set([2])
+    prime_list = None
+    max_consec = [1]
+    max_start_index = [1]
+    max_prime_sum = [2]
+    
+    def __record_if_prime(num):
+        if is_prime(num):
+            prime_set.add(num)
+            
+            
+    def __find_prime_sum(start_index):
+        consec_len = 1
+        cur_sum = prime_list[start_index]
+        while cur_sum < 10 ** 6 and start_index + consec_len < len(prime_list):
+            consec_len += 1
+            cur_sum += prime_list[start_index + consec_len - 1]
+            if cur_sum in prime_set and consec_len > max_consec[0]:
+                max_start_index[0] = start_index
+                max_consec[0] = consec_len
+                max_prime_sum[0] = cur_sum
+
+    
+    for num in xrange(3, 10 ** 6, 2):
+        __record_if_prime(num)     
+    prime_list = sorted(list(prime_set))
+    for pindex in range(len(prime_list)):
+        __find_prime_sum(pindex)
+    return max_prime_sum[0]
+
 
 def get_answer_and_time(pnum):
     """Call a problem function and time its execution."""
