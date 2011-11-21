@@ -169,10 +169,14 @@ def p11():
 
 
 def p32():
-    """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
+    """Project Euler Problem 32 solution.
+    
+    We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number, 15234, is 1 through 5 pandigital.
     The product 7254 is unusual, as the identity, 39 x 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
     Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
-    HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum."""
+    HINT: Some products can be obtained in more than one way so be sure to only include it once in your sum.
+    
+    """
     pan_found = set([0])
     
     def __check_pandig(product,dig_avail):
@@ -197,10 +201,14 @@ def p32():
     
     
 def p33():
-    """The fraction 49/98 is a curious fraction, as an inexperienced mathematician in attempting to simplify it may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
+    """Project Euler Problem 33 solution.
+    
+    The fraction 49/98 is a curious fraction, as an inexperienced mathematician in attempting to simplify it may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
     We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
     There are exactly four non-trivial examples of this type of fraction, less than one in value, and containing two digits in the numerator and denominator.
-    If the product of these four fractions is given in its lowest common terms, find the value of the denominator."""
+    If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
+    
+    """
     def __do_unorthodox_cancelation(num,den, pnum, pden):
         snum, sden = str(num), str(den)
         digint = set(snum).intersection(sden)
@@ -223,9 +231,13 @@ def p33():
 
 
 def p34():
-    """145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
+    """Project Euler Problem 34 solution.
+    
+    145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.
     Find the sum of all numbers which are equal to the sum of the factorial of their digits.
-    Note: as 1! = 1 and 2! = 2 are not sums they are not included.""" 
+    Note: as 1! = 1 and 2! = 2 are not sums they are not included.
+    
+    """ 
     fsum = [0]
     fkeys = list('0123456789')
     fvalues = [math.factorial(x) for x in xrange(0, 10)]
@@ -247,9 +259,13 @@ def p34():
 
 
 def p35():
-    """The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
+    """Project Euler Problem 35 solution.
+    
+    The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
     There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.
-    How many circular primes are there below one million?"""
+    How many circular primes are there below one million?
+    
+    """
     primes = set([2])
     ccount = 0
     
@@ -276,9 +292,13 @@ def p35():
 
 
 def p36():
-    """The decimal number, 585 = 10010010012 (binary), is palindromic in both bases.
+    """Project Euler Problem 36 solution.
+    
+    The decimal number, 585 = 10010010012 (binary), is palindromic in both bases.
     Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
-    (Please note that the palindromic number, in either base, may not include leading zeros.)"""
+    (Please note that the palindromic number, in either base, may not include leading zeros.)
+    
+    """
     pal_sum = 0
     
     def __is_base_2_pal(num):
@@ -298,10 +318,13 @@ def p36():
 
  
 def p37():
-    """The number 3797 has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7. Similarly we can work from right to left: 3797, 379, 37, and 3.
-    Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
-    NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes."""
+    """Project Euler Problem 37 solution.
     
+    The number 3797 has an interesting property. Being prime itself, it is possible to continuously remove digits from left to right, and remain prime at each stage: 3797, 797, 97, and 7. Similarly we can work from right to left: 3797, 379, 37, and 3.
+    Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
+    NOTE: 2, 3, 5, and 7 are not considered to be truncatable primes.
+    
+    """
     tcount = 0
     tsum = 0
     
@@ -333,13 +356,17 @@ def p37():
     return tsum
 
 def p38():
-    """Take the number 192 and multiply it by each of 1, 2, and 3:
+    """Project Euler Problem 38 solution.
+    
+    Take the number 192 and multiply it by each of 1, 2, and 3:
         192 x 1 = 192
         192 x 2 = 384
         192 x 3 = 576
     By concatenating each product we get the 1 to 9 pandigital, 192384576. We will call 192384576 the concatenated product of 192 and (1,2,3)
     The same can be achieved by starting with 9 and multiplying by 1, 2, 3, 4, and 5, giving the pandigital, 918273645, which is the concatenated product of 9 and (1,2,3,4,5).
-    What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with (1,2, ... , n) where n > 1?"""
+    What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with (1,2, ... , n) where n > 1?
+    
+    """
     pan_max = 0
     all_digs = set('123456789')
     
@@ -371,10 +398,13 @@ def p38():
 
 
 def p39():
-    """If p is the perimeter of a right angle triangle with integral length sides, {a,b,c}, there are exactly three solutions for p = 120.
+    """Project Euler Problem 39 solution.
+    
+    If p is the perimeter of a right angle triangle with integral length sides, {a,b,c}, there are exactly three solutions for p = 120.
     {20,48,52}, {24,45,51}, {30,40,50}
-    For which value of p <= 1000, is the number of solutions maximised?"""
-        
+    For which value of p <= 1000, is the number of solutions maximised?
+    
+    """
     def _get_b_for_perim_p(p, a):
         # Calc b based on solving equation a + b + sqrt(a ** 2 + b ** 2) = p
         # Also return whether number is integral
@@ -400,12 +430,15 @@ def p39():
 
 
 def p40():
-    """An irrational decimal fraction is created by concatenating the positive integers:
+    """Project Euler Problem 40 solution.
+    
+    An irrational decimal fraction is created by concatenating the positive integers:
     0.123456789101112131415161718192021...
     It can be seen that the 12th digit of the fractional part is 1.
     If dn represents the nth digit of the fractional part, find the value of the following expression.
-    d1 x d10 x d100 x d1000 x d10000 x d100000 x d1000000"""
+    d1 x d10 x d100 x d1000 x d10000 x d100000 x d1000000
     
+    """
     dvals = [0, 0, 0, 0, 0, 0, 0]
     def __appended_num_len(num, cur_len):
         snum = str(num)
@@ -423,9 +456,12 @@ def p40():
        
 
 def p41():
-    """We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once. For example, 2143 is a 4-digit pandigital and is also prime.
-    What is the largest n-digit pandigital prime that exists?"""
+    """Project Euler Problem 41 solution.
     
+    We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once. For example, 2143 is a 4-digit pandigital and is also prime.
+    What is the largest n-digit pandigital prime that exists?
+    
+    """
     overall_max_pandig = [0]
     
     def __for_digs(chosen_digs, digits_avail):
@@ -447,10 +483,13 @@ def p41():
 
 
 def p42():
-    """The nth term of the sequence of triangle numbers is given by, tn = (1/2)n(n+1); so the first ten triangle numbers are:
+    """Project Euler Problem 42 solution.
+    
+    The nth term of the sequence of triangle numbers is given by, tn = (1/2)n(n+1); so the first ten triangle numbers are:
     1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...
     By converting each letter in a word to a number corresponding to its alphabetical position and adding these values we form a word value. For example, the word value for SKY is 19 + 11 + 25 = 55 = t10. If the word value is a triangle number then we shall call the word a triangle word.
     Using words.txt (right click and 'Save Link/Target As...'), a 16K text file containing nearly two-thousand common English words, how many are triangle words?
+    
     """
     let_keys = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
     let_vals = range(1, 27)
@@ -471,7 +510,9 @@ def p42():
 
 
 def p43():
-    """The number, 1406357289, is a 0 to 9 pandigital number because it is made up of each of the digits 0 to 9 in some order, but it also has a rather interesting sub-string divisibility property.
+    """Project Euler Problem 43 solution.
+    
+    The number, 1406357289, is a 0 to 9 pandigital number because it is made up of each of the digits 0 to 9 in some order, but it also has a rather interesting sub-string divisibility property.
     Let d1 be the 1st digit, d2 be the 2nd digit, and so on. In this way, we note the following:
     d2d3d4=406 is divisible by 2
     d3d4d5=063 is divisible by 3
@@ -480,8 +521,9 @@ def p43():
     d6d7d8=572 is divisible by 11
     d7d8d9=728 is divisible by 13
     d8d9d10=289 is divisible by 17
-    Find the sum of all 0 to 9 pandigital numbers with this property."""
-
+    Find the sum of all 0 to 9 pandigital numbers with this property.
+    
+    """
     pandig_sum = [0]
     
     def __build_pandigs(chosen_digs, digits_avail):
@@ -515,11 +557,14 @@ def p43():
 
 
 def p44():
-    """Pentagonal numbers are generated by the formula, Pn=n(3n-1)/2. The first ten pentagonal numbers are:
+    """Project Euler Problem 44 solution.
+    
+    Pentagonal numbers are generated by the formula, Pn=n(3n-1)/2. The first ten pentagonal numbers are:
     1, 5, 12, 22, 35, 51, 70, 92, 117, 145, ...
     It can be seen that P4 + P7 = 22 + 70 = 92 = P8. However, their difference, 70 - 22 = 48, is not pentagonal.
-    Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference is pentagonal and D = |Pk - Pj| is minimised; what is the value of D?"""
-       
+    Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference is pentagonal and D = |Pk - Pj| is minimised; what is the value of D?
+    
+    """  
     pent_nums = set([1])
     pent_n_max = [1]
     pent_num_max = [1]
@@ -555,13 +600,16 @@ def p44():
 
 
 def p45():
-    """Triangle, pentagonal, and hexagonal numbers are generated by the following formulae:
+    """Project Euler Problem 45 solution.
+    
+    Triangle, pentagonal, and hexagonal numbers are generated by the following formulae:
     Triangle 	  	Tn=n(n+1)/2 	  	1, 3, 6, 10, 15, ...
     Pentagonal 	  	Pn=n(3n-1)/2 	  	1, 5, 12, 22, 35, ...
     Hexagonal 	  	Hn=n(2n-1) 	  	1, 6, 15, 28, 45, ...
     It can be verified that T285 = P165 = H143 = 40755.
-    Find the next triangle number that is also pentagonal and hexagonal."""
+    Find the next triangle number that is also pentagonal and hexagonal.
     
+    """
     pent_nums = set([1])
     pent_n_max = [1]
     pent_num_max = [1]
@@ -592,7 +640,9 @@ def p45():
 
 
 def p46():
-    """It was proposed by Christian Goldbach that every odd composite number can be written as the sum of a prime and twice a square.
+    """Project Euler Problem 46 solution.
+    
+    It was proposed by Christian Goldbach that every odd composite number can be written as the sum of a prime and twice a square.
     9 = 7 + 2*1**2
     15 = 7 + 2*2**2
     21 = 3 + 2*3**2
@@ -600,7 +650,9 @@ def p46():
     27 = 19 + 2*2**2
     33 = 31 + 2*1**2
     It turns out that the conjecture was false.
-    What is the smallest odd composite that cannot be written as the sum of a prime and twice a square?"""
+    What is the smallest odd composite that cannot be written as the sum of a prime and twice a square?
+    
+    """
 
     def __is_prime_plus_2square(num):
         root_num = 1
@@ -620,15 +672,18 @@ def p46():
         odd_num += 2
         
 def p47():
-    """The first two consecutive numbers to have two distinct prime factors are:
+    """Project Euler Problem 47 solution.
+    
+    The first two consecutive numbers to have two distinct prime factors are:
     14 = 2 x 7
     15 = 3 x 5
     The first three consecutive numbers to have three distinct prime factors are:
     644 = 2 x 7 x 23
     645 = 3 x 5 x 43
     646 = 2 x 17 x 19.
-    Find the first four consecutive integers to have four distinct primes factors. What is the first of these numbers?"""
+    Find the first four consecutive integers to have four distinct primes factors. What is the first of these numbers?
     
+    """
     first_num = 2
     while True:
         factors = prime_factors(first_num)
@@ -651,15 +706,22 @@ def p47():
 
 
 def p48():
-    """Find the last ten digits of the number 1^1 ....1000^1000"""
+    """Project Euler Problem 48 solution.
+    
+    Find the last ten digits of the number 1^1 ....1000^1000
+    
+    """
     return str(sum(x**x for x in xrange(1, 1001)))[-10:]
    
     
 def p49():
-    """The arithmetic sequence, 1487, 4817, 8147, in which each of the terms increases by 3330, is unusual in two ways: (i) each of the three terms are prime, and, (ii) each of the 4-digit numbers are permutations of one another.
-    There are no arithmetic sequences made up of three 1-, 2-, or 3-digit primes, exhibiting this property, but there is one other 4-digit increasing sequence.
-    What 12-digit number do you form by concatenating the three terms in this sequence?"""     
+    """Project Euler Problem 49 solution.
     
+    The arithmetic sequence, 1487, 4817, 8147, in which each of the terms increases by 3330, is unusual in two ways: (i) each of the three terms are prime, and, (ii) each of the 4-digit numbers are permutations of one another.
+    There are no arithmetic sequences made up of three 1-, 2-, or 3-digit primes, exhibiting this property, but there is one other 4-digit increasing sequence.
+    What 12-digit number do you form by concatenating the three terms in this sequence?
+    
+    """     
     def __is_list_equal_diff(num_list):
         diffs = [num_list[vindex + 1] - num_list[vindex] for vindex in range(len(num_list) - 1)]
         return all(dval == diffs[0] for dval in diffs)   
@@ -681,12 +743,15 @@ def p49():
 
 
 def p50():
-    """The prime 41, can be written as the sum of six consecutive primes:
+    """Project Euler Problem 50 solution.
+    
+    The prime 41, can be written as the sum of six consecutive primes:
     41 = 2 + 3 + 5 + 7 + 11 + 13
     This is the longest sum of consecutive primes that adds to a prime below one-hundred.
     The longest sum of consecutive primes below one-thousand that adds to a prime, contains 21 terms, and is equal to 953.
-    Which prime, below one-million, can be written as the sum of the most consecutive primes?"""
-     
+    Which prime, below one-million, can be written as the sum of the most consecutive primes?
+    
+    """
     prime_set = set([2])
     prime_list = None
     max_consec = [1]
@@ -716,6 +781,41 @@ def p50():
     for pindex in range(len(prime_list)):
         __find_prime_sum(pindex)
     return max_prime_sum[0]
+
+
+def p51():
+    """Project Euler Problem 51 solution.
+    
+    By replacing the 1st digit of *3, it turns out that six of the nine possible values: 13, 23, 43, 53, 73, and 83, are all prime.
+    By replacing the 3rd and 4th digits of 56**3 with the same digit, this 5-digit number is the first example having seven primes among the ten generated numbers, yielding the family:
+        56003, 56113, 56333, 56443, 56663, 56773, and 56993. Consequently 56003, being the first member of this family, is the smallest prime with this property.
+    Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits) with the same digit, is part of an eight prime value family.
+    
+    """
+    prime_set = set([2, 3])
+    max_check = [3]
+
+
+    def __memoized_is_prime(num):
+        while max_check[0] < num:
+            max_check[0] += 2
+            if is_prime(max_check[0]):
+                prime_set.add(max_check[0])
+        return num in prime_set
+   
+    
+    def __get_replacement_nums(num):
+        snum = str(num)
+        return [[rval for rval in sorted(set().union([int(snum.replace(dig, new_dig)) for new_dig in '0123456789'])) if rval >= num and __memoized_is_prime(rval)] for dig in str(num)]
+
+
+    num = 1
+    while True:
+        num += 2
+        if __memoized_is_prime(num):
+            for rep_list in __get_replacement_nums(num):
+                if len(rep_list) == 8:
+                        return rep_list[0]
 
 
 def get_answer_and_time(pnum):
