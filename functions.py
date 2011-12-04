@@ -6,6 +6,7 @@ Collection of helper functions for Project Euler solutions.
 import math
 import operator
 import itertools
+import copy
 
 
 def factors(n):
