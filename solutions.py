@@ -939,6 +939,40 @@ def p101():
     return fip_sum
 
 
+def p102():
+    """Project Euler Problem 102 solution.
+    
+    Three distinct points are plotted at random on a Cartesian plane, for which -1000 <= x, y <= 1000, such that a triangle is formed.
+    Consider the following two triangles:
+    A(-340,495), B(-153,-910), C(835,-947)
+    X(-175,41), Y(-421,-714), Z(574,-645)
+    It can be verified that triangle ABC contains the origin, whereas triangle XYZ does not.
+    Using triangles.txt (right click and 'Save Link/Target As...'), a 27K text file containing the co-ordinates of one thousand "random" triangles,
+    find the number of triangles for which the interior contains the origin.
+    NOTE: The first two examples in the file represent the triangles in the example given above.
+    
+    """
+    
+    def __triangle_area(x1, y1, x2, y2, x3, y3):
+        return abs((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3))
+    
+    def __does_triangle_contain_origin(x1, y1, x2, y2, x3, y3):
+        """Triangle contains origin if sum of areas substituting points with origin equals initial triangle area."""
+        area_ini = __triangle_area(x1, y1, x2, y2, x3, y3)
+        area_total = __triangle_area(x1, y1, x2, y2, 0, 0) + __triangle_area(x1, y1, 0, 0, x3, y3) + __triangle_area(0, 0, x2, y2, x3, y3)
+        return area_ini == area_total
+    
+    originated_triangle_count = 0
+    triangle_reader = csv.reader(open('p102_triangles.txt', 'rb'), delimiter = ',', quotechar = '"')
+    for coord_list in triangle_reader:
+        clist = []
+        for coord in coord_list:
+            clist.append(int(coord))
+        originated_triangle_count += 1 if apply(__does_triangle_contain_origin, clist) else 0
+  
+    return originated_triangle_count
+    
+    
 def get_answer_and_time(pnum):
     """Call a problem function and time its execution."""
     
@@ -988,7 +1022,7 @@ def is_project_euler_problem_present(pnum):
 def get_number_of_project_euler_problems(use_default_problem_count):
     """Determine the current number of Project Euler problems."""
     
-    default_pnum = 360
+    default_pnum = 361
     if use_default_problem_count:
         return default_pnum
     presumed_present_pnum = default_pnum
