@@ -72,7 +72,7 @@ def is_project_euler_problem_present(pnum):
 def get_number_of_project_euler_problems(use_default_problem_count):
     """Determine the current number of Project Euler problems."""
     
-    default_pnum = 362
+    default_pnum = 363
     if use_default_problem_count:
         return default_pnum
     presumed_present_pnum = default_pnum

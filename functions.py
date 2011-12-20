@@ -80,3 +80,30 @@ def product(xs):
 
 def pandigital(mynum):
     return all([str(x) in list(str(mynum)) for x in xrange(1, len(str(mynum)) + 1)])
+    
+    
+def get_all_subset_index_tuples(nval):
+    """ Generate tuples of indices for all subsets of sets with length nval. Returning tuples so they can be used as dictionary keys."""
+    
+    tuples = []
+    
+    subset_list_a = [[i] for i in range(nval)]
+    for alist in subset_list_a:
+        tuples.append(tuple(alist))
+    subset_list_b = subset_list_a
+    
+    # The length-1 subsets are complete. Now iteratively generate tuples for ever larger subsets.
+    for subset_len_minus_2 in range(nval):
+        if subset_list_b:
+            subset_list_a = subset_list_b
+            subset_list_b = []
+            for alist in subset_list_a:
+                for i in range(alist[-1] + 1, nval):
+                    new_subset = alist[:]
+                    new_subset.append(i)
+                    subset_list_b.append(new_subset)
+            if subset_list_b:
+                for blist in subset_list_b:
+                    tuples.append(tuple(blist))
+                        
+    return tuples

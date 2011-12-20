@@ -131,4 +131,109 @@ def p102():
   
     return originated_triangle_count
     
+  
+  
+def p103():
+    """Project Euler Problem 103 solution.
+       
+    Let S(A) represent the sum of elements in set A of size n. We shall call it a special sum set if for any two non-empty disjoint subsets,
+    B and C, the following properties are true:
+        S(B)  S(C); that is, sums of subsets cannot be equal.
+        If B contains more elements than C then S(B) > S(C).
+        
+        If S(A) is minimised for a given n, we shall call it an optimum special sum set. The first five optimum special sum sets are given below.
+
+        n = 1: {1}
+        n = 2: {1, 2}
+        n = 3: {2, 3, 4}
+        n = 4: {3, 5, 6, 7}
+        n = 5: {6, 9, 11, 12, 13}
+
+    It seems that for a given optimum set, A = {a1, a2, ... , an}, the next optimum set is of the form B = {b, a1+b, a2+b, ... ,an+b},
+    where b is the "middle" element on the previous row. By applying this "rule" we would expect the optimum set
+    for n = 6 to be A = {11, 17, 20, 22, 23, 24}, with S(A) = 117. However, this is not the optimum set,
+    as we have merely applied an algorithm to provide a near optimum set. The optimum set for n = 6 is A = {11, 18, 19, 20, 22, 25}, with S(A) = 115
+    and corresponding set string: 111819202225.
+    Given that A is an optimum special sum set for n = 7, find its set string.
+    NOTE: This problem is related to problems 105 and 106.
     
+    """
+    
+    special_sum_set_infos = {}
+     
+    def get_special_sum_set_infos(nval):
+        """Utility function to get the special sum set infos for a given set length. An info is a sum set and its subset sumsize dictionary."""
+        
+        n_set_infos = special_sum_set_infos[nval] if nval in special_sum_set_infos else []
+        return n_set_infos
+    
+    def set_special_sum_set_info(nval, special_sum_set, subset_sums_set):
+        """Utility function to set a special sum set info (i.e. sum set and its subset sumsize dictionary) for a given set length."""
+        
+        if nval not in special_sum_set_infos:
+            special_sum_set_infos[nval] = []
+        special_sum_set_infos[nval].append([special_sum_set, subset_sums_set])
+        
+    def build_new_special_subset_sumsize_dictionary(base_subset_sumssize_dictionary, new_element):
+        """Create a new subset sumsize dictionary for set containing base special sum set with new element added."""
+        
+        if base_subset_sumssize_dictionary:
+            if new_element in base_subset_sumssize_dictionary:
+                return None
+            new_base_subset_sumssize_dictionary = copy.copy(base_subset_sumssize_dictionary)
+            new_base_subset_sumssize_dictionary[new_element] = 1
+            for sum, num_elements in base_subset_sumssize_dictionary.items():
+                if sum + new_element in base_subset_sumssize_dictionary:
+                    return None
+                new_base_subset_sumssize_dictionary[sum + new_element] = num_elements + 1
+                
+            # Check if len(B) > len(C) then S(B) > S(C)
+            max_elements = 0
+            for sum in sorted(new_base_subset_sumssize_dictionary.iterkeys()):
+                cur_elements = new_base_subset_sumssize_dictionary[sum]
+                if cur_elements < max_elements:
+                    return None
+                max_elements = cur_elements
+            
+            return new_base_subset_sumssize_dictionary
+        else:
+            return {new_element : 1}       
+   
+    def augment_special_sum_sets(nval, max_element_val):
+        """ Update special sum sets according to a new maximum element value."""
+        
+        if nval > 1:
+            n_minus_1_sum_set_infos = get_special_sum_set_infos(nval - 1)
+            for base_sum_set_info in n_minus_1_sum_set_infos:
+                subset_sumsize_dict = build_new_special_subset_sumsize_dictionary(base_sum_set_info[1], max_element_val)
+                if subset_sumsize_dict:
+                    set_special_sum_set_info(nval, base_sum_set_info[0].copy().union([max_element_val]), subset_sumsize_dict)
+        else:
+            set_special_sum_set_info(nval, set([max_element_val]), {max_element_val: 1})
+            
+    def get_optimum_special_sum_set(nval):
+        """ Get the optimum special sum set (i.e. special sum set with lowest sum) for a given number of elements."""
+        
+        opt_sum_set = None
+        sum_val = 0
+        for sum_set_info in get_special_sum_set_infos(nval):
+            cur_sum = sum(sum_set_info[0])
+            if not opt_sum_set:
+                opt_sum_set = sum_set_info[0]
+                sum_val = cur_sum
+            elif cur_sum < sum_val:
+                opt_sum_set = sum_set_info[0]
+                sum_val = cur_sum
+        
+        return opt_sum_set
+     
+    max_element_val = 0
+    while True:
+        max_element_val += 1
+        for x in range(1, 8):
+            augment_special_sum_sets(x, max_element_val)
+        opt_set = get_optimum_special_sum_set(7)
+        if opt_set:
+            return ''.join(str(x) for x in sorted(list(opt_set)))
+
+      
