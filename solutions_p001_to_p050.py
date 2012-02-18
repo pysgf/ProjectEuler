@@ -150,6 +150,10 @@ def p12():
 
     return triangle_number
 
+def p13():
+    import p13_nums
+    return str(sum(p13_nums.p13_nums))[:10]
+
 def p18(triangle=None):
         #triangle = [[3],
         #            [7, 4],
