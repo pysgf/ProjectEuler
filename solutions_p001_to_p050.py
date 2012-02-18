@@ -93,6 +93,22 @@ def p9():
 def p10(n=2000000):
     return sum([p for p in xrange(0, n) if is_prime(p)])
 
+def p12():
+    def _facs(num):
+        rv = [1, num]
+        for i in xrange(2, int(math.sqrt(num)) + 1):
+            if not num % i:
+                rv.extend([i,num/i])
+        return rv
+
+    triangle_number = 1
+    idx = 1
+    while(len(_facs(triangle_number)) < 500):
+        idx += 1
+        triangle_number += idx
+
+    return triangle_number
+
 def p18(triangle=None):
         #triangle = [[3],
         #            [7, 4],
