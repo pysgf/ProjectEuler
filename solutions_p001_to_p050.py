@@ -93,6 +93,47 @@ def p9():
 def p10(n=2000000):
     return sum([p for p in xrange(0, n) if is_prime(p)])
 
+def p11():
+    # Calculate Horizontal product
+    xs = []
+    for i in xrange(20):
+        for j in xrange(20):
+            xs.append(product(p11_matrix[i][j:j+4]))
+    horiz = max(xs)
+
+
+    # Calculate Vertical product
+    xs = []
+    for i in xrange(20):
+        for j in xrange(17):
+            ys = []
+            for k in xrange(4):
+                ys.append(p11_matrix[j+k][i])
+            xs.append(product(ys))
+    vert = max(xs)
+
+    # Calculate First Diagonal product
+    xs = []
+    for i in xrange(17):
+        for j in xrange(17):
+            ys = []
+            for k in xrange(4):
+                ys.append(p11_matrix[j+k][i+k])
+            xs.append(product(ys))
+    diag1 = max(xs)
+
+    # Calculate Second Diagonal product
+    xs = []
+    for i in xrange(19, 2, -1):
+        for j in xrange(17):
+            ys = []
+            for k in xrange(4):
+                ys.append(p11_matrix[j+k][i-k])
+            xs.append(product(ys))
+    diag2 = max(xs)
+
+    return max([horiz, vert, diag1, diag2])
+
 def p12():
     def _facs(num):
         rv = [1, num]
@@ -142,47 +183,6 @@ def p25():
         if len(str(fib(n))) >= 1000:
             return n
         n += 1
-
-def p11():
-    # Calculate Horizontal product
-    xs = []
-    for i in xrange(20):
-        for j in xrange(20):
-            xs.append(product(p11_matrix[i][j:j+4]))
-    horiz = max(xs)
-
-
-    # Calculate Vertical product
-    xs = []
-    for i in xrange(20):
-        for j in xrange(17):
-            ys = []
-            for k in xrange(4):
-                ys.append(p11_matrix[j+k][i])
-            xs.append(product(ys))
-    vert = max(xs)
-
-    # Calculate First Diagonal product
-    xs = []
-    for i in xrange(17):
-        for j in xrange(17):
-            ys = []
-            for k in xrange(4):
-                ys.append(p11_matrix[j+k][i+k])
-            xs.append(product(ys))
-    diag1 = max(xs)
-
-    # Calculate Second Diagonal product
-    xs = []
-    for i in xrange(19, 2, -1):
-        for j in xrange(17):
-            ys = []
-            for k in xrange(4):
-                ys.append(p11_matrix[j+k][i-k])
-            xs.append(product(ys))
-    diag2 = max(xs)
-
-    return max([horiz, vert, diag1, diag2])
 
 
 def p32():
