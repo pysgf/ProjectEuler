@@ -154,6 +154,29 @@ def p13():
     import p13_nums
     return str(sum(p13_nums.p13_nums))[:10]
 
+def p14():
+    def _collatz(n):
+        rv = [n]
+        while n != 1:
+            if n % 2:
+                n = 3 * n + 1
+            else:
+                n = n/2
+            rv.append(n)
+        return rv
+
+    max_len = 0
+    longest_i = 0
+    for i in xrange(2, 1000000):
+        c = _collatz(i)
+        if len(c) > max_len:
+            max_len = len(c)
+            longest_i = i
+    return longest_i
+
+
+
+
 def p18(triangle=None):
         #triangle = [[3],
         #            [7, 4],
